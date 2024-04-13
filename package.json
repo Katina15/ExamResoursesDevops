@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.30",
-    "mocha": "^10.2.0"
+    "mocha": "^10.2.0",
+    "nock": "^13.5.4"
   }
 }
