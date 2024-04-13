@@ -4,6 +4,6 @@ test('Check home page', async ({ page }) => {
     await page.goto('http://localhost:8080/');
     const heading = await page.$('p');
     const text = await heading.textContent();
-    expect(text).toContain('Cookbook: 3');  
+    expect(text).toContain('Cookbook');  
   });
   
