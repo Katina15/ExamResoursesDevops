@@ -24,4 +24,4 @@ jobs:
     - name: Mock server responses
       run: npm install nock
     - name: Run the unit tests
-      run: npm run test:unit:mocked
+      run: npm run test:unit
