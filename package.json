@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test:unit": "mocha -u tdd 'tests/unit/*.js'",
+    "test:unit:mocked": "NODE_ENV=test mocha -u tdd 'tests/unit/*.js' --exit"
     "test:ui": "npx playwright test",
     "start": "node index.js"
   },
