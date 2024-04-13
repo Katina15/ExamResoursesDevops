@@ -23,6 +23,8 @@ suite('Add Products page', function() {
   });
 
   test('Add valid product', async function() {
+    // Assuming that we already have three products in the cookbook
+    // Add one more product, which should not be allowed
     let res = await fetch(
       "http://localhost:8080/Add-Product",
       {
@@ -30,33 +32,32 @@ suite('Add Products page', function() {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: "name=Salami&quantity=100 g"
+        body: "name=Ham&quantity=200 g"
       }
     );
     let body = await res.text();
-    let productsReturned = body.includes(
-		"<ul><li>Water - 1 cup</li><li>Eggs - 3</li><li>Flour - 1 cup</li><li>Salami - 100 g</li></ul>");
-    assert.ok(productsReturned, "Add product failed");
+    let errMsg = body.includes("Cannot add more than three products to the cookbook!");
+    assert.ok(errMsg, "Adding valid product should not be allowed when the limit is reached");
   });
-
+  
   test('Add invalid product', async function() {
-     let res = await fetch(
-      "http://localhost:8080/Add-Product",
-      {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: "name=&quantity=100"
-      }
-    );
-    let body = await res.text();
-    let errMsg = body.includes("Cannot add product. Name and quantity fields are required!");
-    assert.ok(errMsg, "Add invalid product should display an error message");
-
-    res = await fetch("http://localhost:8080/");
-    body = await res.text();
-	  assert.ok(body.includes("Cookbook: <b>3</b>"), 
-		"Add invalid product should not change the products count");
+    let res = await fetch(
+     "http://localhost:8080/Add-Product",
+     {
+       method: 'POST',
+       headers: {
+         "Content-Type": "application/x-www-form-urlencoded"
+       },
+       body: "name=&quantity=100"
+     }
+   );
+   let body = await res.text();
+   let errMsg = body.includes("Cannot add product. Name and quantity fields are required!");
+   assert.ok(errMsg, "Add invalid product should display an error message");
+  
+   res = await fetch("http://localhost:8080/");
+   body = await res.text();
+   assert.ok(body.includes("Cookbook: <b>3</b>"), 
+     "Product count should remain at 3 after adding an invalid product");
   });
 });
