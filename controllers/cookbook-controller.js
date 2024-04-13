@@ -32,20 +32,38 @@ function setup(app, cookbook) {
   }
 
   app.post('/add-product', function(req, res) {
+    // Check if name or quantity fields are empty
     if (paramEmpty(req.body.name) || paramEmpty(req.body.quantity)) {
       let model = {
         title: "Add Product", 
         errMsg: "Cannot add product. Name and quantity fields are required!"
       };
-      res.render('add-product', model);
-      return;
+      return res.render('add-product', model);
     }
+  
+    // Check if the cookbook already contains three products
+    if (cookbook.length >= 3) {
+      let model = {
+        title: "Add Product", 
+        errMsg: "Cannot add more than three products to the cookbook!"
+      };
+      return res.render('add-product', model);
+    }
+  
     let product = {
       name: req.body.name,
       quantity: req.body.quantity
     };
+  
     cookbook.push(product);
-    res.redirect('/cookbook');
+    
+    // Check if the cookbook now contains more than three products
+    if (cookbook.length > 3) {
+      // Remove the last product to ensure only three products are kept
+      cookbook.pop();
+    }
+  
+    return res.redirect('/cookbook');
   });
 }
 
