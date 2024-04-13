@@ -21,5 +21,7 @@ jobs:
         cache: 'npm'
     - name: Install NPM dependencies    
       run: npm install
+    - name: Mock server responses
+      run: npm install nock
     - name: Run the unit tests
-      run: npm run test:unit
+      run: npm run test:unit:mocked
